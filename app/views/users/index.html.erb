@@ -1,1 +1,7 @@
-<%= react_component("user/Index", {users: @users}) %>
+<% if user_signed_in? %>
+    <% if current_user.role == "ADMIN" %>
+        <%= react_component("users/Index", {users: @users}) %>
+    <% end %>
+<% else %>
+    <%= controller.redirect_back_or_to '/' %>
+<% end%>

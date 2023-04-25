@@ -1,0 +1,5 @@
+<% if user_signed_in? %>
+    <%= react_component("home/Index", {signed: true, current_user: current_user}) %>
+<% else %>
+    <%= react_component("home/Index", {signed: false}) %>
+<% end %>

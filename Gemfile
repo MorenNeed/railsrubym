@@ -16,6 +16,9 @@ gem "pg", "~> 1.1"
 gem 'react-rails', '~> 2.6', '>= 2.6.1'
 gem 'webpacker'
 
+# Use the device for authentication
+gem "devise"
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
 
