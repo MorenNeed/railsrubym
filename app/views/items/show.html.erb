@@ -1,5 +1,5 @@
 <% if user_signed_in? %>
-    <%= react_component("items/Index", {signed: true, current_user: current_user, items: @items}) %>
+    <%= react_component("items/Show", {signed: true, current_user: current_user, item: @item}) %>
 <% else %>
     <%= controller.redirect_to '/auth/register/sign_up' %>
 <% end %>

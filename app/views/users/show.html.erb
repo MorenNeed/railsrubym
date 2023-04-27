@@ -1,1 +1,5 @@
-<%= react_component("users/Show", {user: @user}) %>
+<% if user_signed_in? %>
+    <%= react_component("users/Show", {signed: true, current_user: current_user, user: @user}) %>
+<% else %>
+    <%= controller.redirect_back_or_to '/' %>
+<% end %>

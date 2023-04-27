@@ -58,7 +58,7 @@ class Index extends React.Component {
 
     return (
       <React.Fragment>
-        <ResponsiveAppBar />
+        <ResponsiveAppBar signed={this.props.signed} current_user={this.props.current_user} />
         <Breadcrumbs aria-label="breadcrumb" style={{padding: "1rem"}}>
           <Link underline="hover" color="inherit" href="/">
             Home

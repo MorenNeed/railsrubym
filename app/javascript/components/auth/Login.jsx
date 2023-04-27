@@ -1,5 +1,5 @@
 import React from "react";
-import "fontsource-montserrat";
+import 'fontsource-montserrat';
 import {
   Typography,
   Grid,
@@ -10,17 +10,15 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-class Register extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      csrfToken: "",
-      firstName: "",
-      lastName: "",
       email: "",
       password: "",
       passError: false,
       passErrorMessage: "",
+      csrfToken: "",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -38,13 +36,10 @@ class Register extends React.Component {
   }
 
   handlePasswwordChange(event) {
-    if (event.target.value.length < this.props.pass_length) {
+    if (event.target.value.length < 8) {
       this.setState({ passError: true });
       this.setState({
-        passErrorMessage:
-          "Password must contain " +
-          this.props.pass_length +
-          " or more symbols.",
+        passErrorMessage: "Password must contain 8 or more symbols.",
       });
     } else if (!/[^0-9]/.test(event.target.value)) {
       this.setState({ passError: true });
@@ -61,25 +56,20 @@ class Register extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-
     if (this.state.passError) {
     } else {
-      // Code to submit form data goes here
+         // Code to submit form data goes here
       const data = {
         user: {
-          first_name: this.state.firstName,
-          last_name: this.state.lastName,
-          role: "USER",
           email: this.state.email,
           password: this.state.password,
-          password_confirmation: this.state.password,
-        },
+        }
       };
 
-      axios.post("/auth/register", data, {
+      axios.post('/auth/login', data, {
         headers: {
-          "X-CSRF-Token": this.state.csrfToken,
-        },
+          'X-CSRF-Token': this.state.csrfToken
+        }
       }).then(() => {
         window.location.reload(false);
       });
@@ -89,45 +79,12 @@ class Register extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <TextField
-          type="hidden"
-          name="authenticity_token"
-          value={this.state.csrfToken}
-        />
         <Paper elevation={3} className="register-container">
-          <Typography
-            variant="h4"
-            align="center"
-            gutterBottom
-            paddingBottom={10}
-            fontFamily={"Montserrat"}
-            fontWeight={900}
-            fontSize={40}
-          >
-            Create an account
+          <Typography variant="h4" align="center" gutterBottom paddingBottom={10} fontFamily={"Montserrat"} fontWeight={900} fontSize={40}>
+            Login to your account
           </Typography>
           <form onSubmit={this.handleSubmit}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  required
-                  label="First Name"
-                  name="firstName"
-                  value={this.state.firstName}
-                  onChange={this.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  required
-                  label="Last Name"
-                  name="lastName"
-                  value={this.state.lastName}
-                  onChange={this.handleChange}
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -161,35 +118,22 @@ class Register extends React.Component {
                   size="large"
                   type="submit"
                   fullWidth
-                  style={{
-                    height: "60px",
-                    fontFamily: "Montserrat",
-                    fontSize: "20px",
-                    fontWeight: "800",
-                  }}
+                  style={{height: "60px", fontFamily: "Montserrat", fontSize: "20px", fontWeight: "800"}}
                   fontFamily={"Montserrat"}
                   fontWeight={900}
                   fontSize={40}
-                  onSubmit={this.handleSubmit}
                 >
-                  Register
+                  Login
                 </Button>
               </Grid>
             </Grid>
           </form>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            marginTop={4}
-            fontFamily={"Montserrat"}
-            fontWeight={500}
-            fontSize={20}
-          >
-            Already have an account? <Link href="/auth/login">Login</Link>
+          <Typography variant="subtitle1" align="center" marginTop={4} fontFamily={"Montserrat"} fontWeight={500} fontSize={20}>
+            Do not have an account? <Link href="/auth/register/sign_up">Register</Link>
           </Typography>
           <style jsx>{`
             .register-container {
-              font-family: "Montserrat", sans-serif;
+              font-family: 'Montserrat', sans-serif;
               margin: 8vh auto;
               width: 60%;
               height: 60vh;
@@ -225,4 +169,4 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+export default Login;

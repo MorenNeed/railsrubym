@@ -18,10 +18,9 @@ class Show extends React.Component {
 
     return (
       <React.Fragment>
-        <ResponsiveAppBar />
+        <ResponsiveAppBar signed={this.props.signed} current_user={this.props.current_user} />
         <Box sx={{ paddingTop: "5%", height: "80vh", width: "100%" }}>
           <Paper
-            variant="outlined"
             elevation={3}
             sx={{
               height: "100%",
@@ -80,7 +79,7 @@ class Show extends React.Component {
                 <Typography variant="h6" sx={{ color: "#666" }}>
                   Password:
                 </Typography>
-                <TextField defaultValue={user.password} fullWidth />
+                <TextField defaultValue={''} fullWidth />
               </Grid>
               <Grid
                 item

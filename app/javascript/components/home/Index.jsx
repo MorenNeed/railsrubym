@@ -5,8 +5,13 @@ import ResponsiveAppBar from "../appBar/Index";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Cart from "../cart/Cart";
 
 class Index extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
   render() {
     const sliderSettings = {
       dots: false,
@@ -17,12 +22,16 @@ class Index extends React.Component {
       autoplay: true,
       autoplaySpeed: 3000,
       pauseOnHover: true,
+      style: {
+        height: "100%",
+        width: "100%",
+      }
     };
     return (
       <React.Fragment>
-        <ResponsiveAppBar />
-        <div className={"slider-container"}>
-          <Slider {...sliderSettings} style={{height: "100vh"}}>
+        <ResponsiveAppBar signed={this.props.signed} current_user={this.props.current_user} />
+        {/* <div className={"slider-container"}>
+          <Slider {...sliderSettings}>
               <img
                 src="https://picsum.photos/500/300"
                 alt="slide1"
@@ -39,7 +48,7 @@ class Index extends React.Component {
                 className="slider-image"
               />
           </Slider>
-        </div>
+        </div> */}
         <div className={"container"}>
           <Typography variant="h1" className={"heading"}>
             Welcome to our Online Store!
@@ -59,14 +68,20 @@ class Index extends React.Component {
             right: 0;
             bottom: 0;
             z-index: -1;
+            height: 100vh;
           }
           .container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 80vh;
-            z-index: 1;
+            height: 100vh;
+            z-index: 2;
           }
           .heading {
             font-size: 5rem;
