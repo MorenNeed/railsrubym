@@ -37,10 +37,9 @@ class Show extends React.Component {
     this.setState({ quantity: event.target.value });
   }
 
-  handleClick(event) {
-    console.log(this.state.quantity);
+  handleClick() {
     const items = JSON.parse(localStorage.getItem("cart")) || [];
-    localStorage.setItem("cart", JSON.stringify([...items, {name: this.props.item.name, price: this.props.item.price, quantity: this.state.quantity}]));
+    localStorage.setItem("cart", JSON.stringify([...items, {id: this.props.item.id, name: this.props.item.name, price: this.props.item.price, quantity: this.state.quantity}]));
   }
 
   render() {

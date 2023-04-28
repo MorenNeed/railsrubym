@@ -25,8 +25,9 @@ function ResponsiveAppBar(props) {
     props.signed && props.current_user.role === "ADMIN"
       ? [
           { label: "Products", type: "link", data: "/items" },
-          { label: "Users", type: "link", data: "/users" },
-          { label: "Users Orders", type: "link", data: "/" },
+          { label: "Manage Products", type: "link", data: "/items/manage"},
+          { label: "Manage Users", type: "link", data: "/users" },
+          { label: "Manage Orders", type: "link", data: "/orders" },
           { label: "Cart", type: "action", data: "toggleCartVisibility" },
         ]
       : [
@@ -40,7 +41,7 @@ function ResponsiveAppBar(props) {
           type: "link",
           data: `/users/${props.current_user.id}`,
         },
-        { label: "My Orders", type: "link", data: "/" },
+        { label: "My Orders", type: "link", data: `/orders/${props.current_user.id}`},
         { label: "Logout", type: "action", data: "handleLogout" },
       ]
     : [
@@ -316,7 +317,7 @@ function ResponsiveAppBar(props) {
                 )
               )}
             </Menu>
-            <Cart isOpen={cartVisible} />
+            <Cart isOpen={cartVisible}/>
           </Box>
         </Toolbar>
       </Container>

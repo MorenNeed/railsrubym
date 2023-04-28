@@ -1,3 +1,5 @@
+import { Box, Button, Typography } from "@mui/material";
+import axios from "axios";
 import React from "react";
 
 class Cart extends React.Component {
@@ -5,55 +7,97 @@ class Cart extends React.Component {
     super(props);
 
     this.state = {
-      cartItems: []
+      items: [],
+    };
+    this.removeFromCart = this.removeFromCart.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  removeFromCart(index) {
+    if (this.state.items.length == 1) {
+      const newItems = [];
+      localStorage.setItem("cart", JSON.stringify(newItems));
+      this.setState({ items: newItems });
+    } else {
+      const newItems = this.state.items.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(newItems));
+      this.setState({ items: newItems });
     }
   }
-  componentDidMount() {
-    localStorage.setItem("cart", JSON.stringify(this.state.cartItems));
-  }
-  render() {
-    const items = JSON.parse(localStorage.getItem("cart")) || [];
 
-    // Loop through each item in the cart and add a table row
-    const cartItems = Object.entries(items).map(([itemId, itemData]) => {
-      const itemName = itemData.name;
-      const itemPrice = itemData.price;
-      const itemQuantity = itemData.quantity;
-      const itemTotal = itemPrice * itemQuantity;
+  handleSubmit(event) {
+    event.preventDefault();
+    const order_descriptions_attributes = [];
+    var count = 0;
 
-      return (
-        <tr key={itemId}>
-          <td className="item-name">{itemName}</td>
-          <td className="item-price">{itemPrice} UAH</td>
-          <td className="item-quantity">{itemQuantity}</td>
-          <td className="item-total">{itemTotal} UAH</td>
-          <td>
-            <button
-              className="remove-item-button"
-              onClick={() => removeFromCart(itemId)}
-            >
-              Remove
-            </button>
-          </td>
-        </tr>
+    this.state.items.forEach((item) => {
+      const existingItem = order_descriptions_attributes.find(
+        (orderDescription) => orderDescription.item_id === item.id
       );
+
+      if (existingItem) {
+        const quantity = parseInt(existingItem.quantity, 10) + parseInt(item.quantity, 10);
+        existingItem.quantity = quantity;
+      } else {
+        order_descriptions_attributes.push({
+          item_id: item.id,
+          quantity: parseInt(item.quantity, 10),
+        });
+        count++;
+      }
     });
 
+    const csrfToken = document.querySelector('[name="csrf-token"]').content;
+
+    axios.post("/orders", {order: {amount: count, order_descriptions_attributes: order_descriptions_attributes}}, {
+      headers: {
+        'X-CSRF-Token': csrfToken
+      }
+    });
+
+    const newItems = [];
+    localStorage.setItem("cart", JSON.stringify(newItems));
+    this.setState({ items: newItems });
+  }
+
+  componentDidMount() {
+    this.setState({ items: JSON.parse(localStorage.getItem("cart") || []) });
+  }
+
+  render() {
+    // Loop through each item in the cart and add a table row
+    const cartItems = Object.entries(this.state.items).map(
+      ([itemId, itemData]) => {
+        const itemName = itemData.name;
+        const itemPrice = itemData.price;
+        const itemQuantity = itemData.quantity;
+        const itemTotal = itemPrice * itemQuantity;
+
+        return (
+          <tr key={itemId}>
+            <td className="item-name">{itemName}</td>
+            <td className="item-price">{itemPrice} UAH</td>
+            <td className="item-quantity">{itemQuantity}</td>
+            <td className="item-total">{itemTotal} UAH</td>
+            <td>
+              <Button
+                className="remove-item-button"
+                onClick={() => this.removeFromCart(itemId)}
+              >
+                Remove
+              </Button>
+            </td>
+          </tr>
+        );
+      }
+    );
+
     // Calculate the cart total
-    const cartTotal = Object.values(items).reduce(
+    const cartTotal = Object.values(this.state.items).reduce(
       (total, { price, quantity }) => {
         return total + price * quantity;
       },
       0
     );
-
-    function removeFromCart(index) {
-      const newCartItems = [...this.state.cartItems];
-      newCartItems.splice(index, 1);
-      this.setState({cartItems: newCartItems}, () => {
-        localStorage.setItem("cart", JSON.stringify(this.state.cartItems));
-      });
-    }
 
     return (
       <div className={`cart-container ${this.props.isOpen ? " open" : ""}`}>
@@ -72,11 +116,27 @@ class Cart extends React.Component {
           <tfoot>
             <tr>
               <td colSpan="3"></td>
-              <td className="cart-total">${cartTotal}</td>
+              <td className="cart-total">{cartTotal} UAH</td>
               <td></td>
             </tr>
           </tfoot>
         </table>
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          alignItems={"flex-end"}
+          padding={10}
+        >
+          <Button
+            variant="contained"
+            type="submit"
+            size="large"
+            fullWidth
+            onClick={this.handleSubmit}
+          >
+            Buy
+          </Button>
+        </Box>
         <style jsx>
           {`
             .cart-container {

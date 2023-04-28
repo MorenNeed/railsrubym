@@ -1,0 +1,5 @@
+<% if user_signed_in? %>
+  <%= react_component("orders/Show", {signed: true, current_user: current_user, user_orders: @user_orders_json}) %>
+<% else %>
+  <%= controller.redirect_back_or_to '/' %>
+<% end %>

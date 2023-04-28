@@ -8,6 +8,6 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :role, presence: true
-
-  has_one :cart, class_name: "cart", foreign_key: "cart_id"
+  
+  has_many :orders, dependent: :destroy
 end
