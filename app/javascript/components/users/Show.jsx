@@ -7,12 +7,61 @@ import {
   Button,
   ButtonGroup,
   Grid,
+  Link,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
+import axios from "axios";
 
 class Show extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      password: "",
+      newPassword: "",
+      csrfToken: document.querySelector('[name="csrf-token"]').content
+    }
+
+    this.handleLogout = this.handleLogout.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSave = this.handleSave.bind(this);
+  }
+  handleLogout() {
+    axios
+      .delete("/auth/signout", {
+        headers: {
+          "X-CSRF-Token": this.state.csrfToken,
+        },
+      })
+      .then(() => {
+        window.location.reload();
+      });
+  };
+
+  handleSave() {
+    axios({
+      method: "patch",
+      url: `/users/${this.props.current_user.id}/update_password`,
+      data: {
+        user: {
+          current_password: this.state.password,
+          password: this.state.newPassword,
+          password_confirmation: this.state.newPassword,
+        }
+      },
+      headers: {
+        'X-CSRF-Token': this.state.csrfToken
+      }
+    }).then(() => {
+      window.location.reload();
+    });
+  }
+
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
   render() {
     const { user } = this.props;
 
@@ -71,15 +120,18 @@ class Show extends React.Component {
             >
               <Grid item sx={{ width: "100%" }}>
                 <Typography variant="h6" sx={{ color: "#666" }}>
-                  Email:
+                  Email: {user.email}
                 </Typography>
-                <TextField defaultValue={user.email} fullWidth />
               </Grid>
               <Grid item sx={{ width: "100%" }}>
                 <Typography variant="h6" sx={{ color: "#666" }}>
-                  Password:
+                  Current Password:
                 </Typography>
-                <TextField defaultValue={''} fullWidth />
+                <TextField type="password" name="password" value={this.state.password} onChange={this.handleChange} fullWidth />
+                <Typography variant="h6" sx={{ color: "#666" }}>
+                  New password:
+                </Typography>
+                <TextField type="password" name="newPassword" value={this.state.newPassword} onChange={this.handleChange} fullWidth />
               </Grid>
               <Grid
                 item
@@ -96,6 +148,7 @@ class Show extends React.Component {
                     color="primary"
                     size="large"
                     sx={{ padding: "1rem 3rem" }}
+                    onClick={this.handleSave}
                   >
                     Save
                   </Button>
@@ -106,7 +159,9 @@ class Show extends React.Component {
                     sx={{ padding: "1rem 3rem" }}
                     style={{marginLeft: "1rem"}}
                   >
-                    Check Orders
+                    <Link href={`/orders/${this.props.current_user.id}`}>
+                      Check Orders
+                    </Link>
                   </Button>
                 </ButtonGroup>
                 <Button
@@ -114,6 +169,7 @@ class Show extends React.Component {
                   color="error"
                   size="large"
                   sx={{ padding: "1rem 3rem" }}
+                  onClick={this.handleLogout}
                 >
                   Logout
                 </Button>
@@ -131,7 +187,6 @@ Show.propTypes = {
     first_name: PropTypes.string.isRequired,
     last_name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
   }).isRequired,
 };
 

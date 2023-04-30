@@ -12,7 +12,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
-  resources :users
-  resources :items
+  resources :users do
+    patch 'update_password', on: :member
+  end
+  resources :items do
+    collection do
+      get 'manage'
+    end
+  end
   resources :orders
 end

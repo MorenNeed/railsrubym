@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Link, Typography } from "@mui/material";
 import React from "react";
 import PropTypes from "prop-types";
 import ResponsiveAppBar from "../appBar/Index";
@@ -8,7 +8,6 @@ import "slick-carousel/slick/slick-theme.css";
 import Cart from "../cart/Cart";
 
 class Index extends React.Component {
-
   constructor(props) {
     super(props);
   }
@@ -25,30 +24,14 @@ class Index extends React.Component {
       style: {
         height: "100%",
         width: "100%",
-      }
+      },
     };
     return (
       <React.Fragment>
-        <ResponsiveAppBar signed={this.props.signed} current_user={this.props.current_user} />
-        {/* <div className={"slider-container"}>
-          <Slider {...sliderSettings}>
-              <img
-                src="https://picsum.photos/500/300"
-                alt="slide1"
-                className="slider-image"
-              />
-              <img
-                src="https://picsum.photos/500/301"
-                alt="slide2"
-                className="slider-image"
-              />
-              <img
-                src="https://picsum.photos/500/302"
-                alt="slide3"
-                className="slider-image"
-              />
-          </Slider>
-        </div> */}
+        <ResponsiveAppBar
+          signed={this.props.signed}
+          current_user={this.props.current_user}
+        />
         <div className={"container"}>
           <Typography variant="h1" className={"heading"}>
             Welcome to our Online Store!
@@ -56,9 +39,16 @@ class Index extends React.Component {
           <Typography variant="subtitle1" className={"subheading"}>
             Check out our latest deals and promotions.
           </Typography>
-          <Button variant="contained" color="primary" className={"button"}>
+          <Link
+            href="/items"
+            underline="none"
+            color="#fff"
+            bgcolor="text.primary"
+            variant="contained"
+            className={"button"}
+          >
             Shop Now
-          </Button>
+          </Link>
         </div>
         <style jsx>{`
           .slider-container {
@@ -102,6 +92,7 @@ class Index extends React.Component {
             padding: 1rem 2rem;
             box-shadow: 2px 2px #ccc;
             transition: all 0.3s ease-in-out;
+            cursor: pointer;
           }
           .button:hover {
             transform: translateY(-5px);

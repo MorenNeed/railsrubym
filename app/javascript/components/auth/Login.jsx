@@ -36,10 +36,10 @@ class Login extends React.Component {
   }
 
   handlePasswwordChange(event) {
-    if (event.target.value.length < 8) {
+    if (event.target.value.length < this.props.minimum_password_length) {
       this.setState({ passError: true });
       this.setState({
-        passErrorMessage: "Password must contain 8 or more symbols.",
+        passErrorMessage: `Password must contain ${this.props.minimum_password_length} or more symbols.`,
       });
     } else if (!/[^0-9]/.test(event.target.value)) {
       this.setState({ passError: true });

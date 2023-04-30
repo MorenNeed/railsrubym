@@ -19,7 +19,8 @@ class Show extends React.Component {
         { field: "name", headerName: "Name", width: 150 },
         { field: "description", headerName: "Description", width:400},
         { field: "price", headerName: "Price", width: 90},
-        { field: "quantity", headerName: "Quantity", width: 150 },
+        { field: "quantity", headerName: "Quantity", width: 70 },
+        { field: "total", headerName: "Total", width: 90}
       ];
       const rows = order.order_descriptions.map((description) => {
         return {
@@ -29,6 +30,7 @@ class Show extends React.Component {
           description: description.item.description,
           price: description.item.price,
           quantity: description.quantity,
+          total: description.item.price * description.quantity,
         };
       });
       return (

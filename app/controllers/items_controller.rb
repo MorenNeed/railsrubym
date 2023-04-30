@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+    respond_to :json
     before_action :set_item, only: [:show, :edit, :update, :destroy]
 
     def index
@@ -13,8 +14,13 @@ class ItemsController < ApplicationController
         @item = Item.new
     end
 
+    def manage
+        @items = Item.all
+        render
+    end
+
     def create
-        @item = Item.new(user_params)
+        @item = Item.new(item_params)
 
         if @item.save
             redirect_to items_path, notice: "Item was succesfuly created."
@@ -24,14 +30,13 @@ class ItemsController < ApplicationController
     end
 
     def edit
+        @items = Item.all
     end
 
     def update
-        if @item.update(item_params)
-            redirect_to items_path, notice: "Item was succesfuly updated."
-        else
-            render :edit
-        end
+        @item = Item.find(params[:id])
+        @item.update_attribute(params[:updatedField].to_sym, params[:updatedValue])
+        flash[:success] = "Profile updated successfully!"
     end
 
     def destroy
@@ -46,6 +51,10 @@ class ItemsController < ApplicationController
     end
 
     def item_params
-        params.require(:item)
+        params.require(:item).permit(:name, :description, :price).tap do |whitelisted|
+          whitelisted[:name].presence
+          whitelisted[:description].presence
+          whitelisted[:price].presence
+        end
     end
 end

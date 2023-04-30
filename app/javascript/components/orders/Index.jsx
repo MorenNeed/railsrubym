@@ -20,10 +20,9 @@ function groupBy(list, keyGetter) {
 }
 
 class Index extends React.Component {
+
   render() {
     const ordersByUser = groupBy(this.props.orders, (order) => order.user_id);
-
-    console.log("", ordersByUser);
 
     const tablesByUser = [...ordersByUser.entries()].map(
       ([userId, orders]) => {
@@ -33,7 +32,8 @@ class Index extends React.Component {
             { field: "name", headerName: "Name", width: 150 },
             { field: "description", headerName: "Description", width: 400 },
             { field: "price", headerName: "Price", width: 90 },
-            { field: "quantity", headerName: "Quantity", width: 150 },
+            { field: "quantity", headerName: "Quantity", width: 70 },
+            { field: "total", headerName: "Total", width: 90 }
           ];
 
           const rows = order.order_descriptions.map((description) => {
@@ -44,11 +44,12 @@ class Index extends React.Component {
               description: description.item.description,
               price: description.item.price,
               quantity: description.quantity,
+              total: description.item.price * description.quantity,
             };
           });
 
           return (
-            <Box key={order.id} sx={{ height: "80vh", width: "100%" }}>
+            <Box key={order.id} sx={{ height: "fit-content", width: "100%" }}>
               <Typography variant="h5" style={{ padding: "1rem" }}>
                 Order #{order.id}
               </Typography>

@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-    before_action :set_user, only: [:show, :edit, :update, :destroy]
+    respond_to :json
+    before_action :set_user, only: [:show, :edit, :update, :destroy, :update_password]
 
     def index
         @users = User.all
@@ -27,16 +28,27 @@ class UsersController < ApplicationController
     end
 
     def update
-        if @user.update(user_params)
-            redirect_to users_path, notice: "User was succesfuly updated."
-        else
-            render :edit
-        end
+        @user = User.find(params[:id])
+        @user.update_attribute(params[:updatedField].to_sym, params[:updatedValue])
+        flash[:success] = "Profile updated successfully!"
     end
 
     def destroy
-        @user.destroy
-        redirect_to users_path, notice: "User was succesfuly destroyed."
+        if @user.destroy
+            flash[:success] = "User was deleted successfully!"
+        else
+            flash[:error] = "Error"
+        end
+    end
+
+    def update_password
+        if @user.update_with_password(user_password_update_params)
+            # Sign in the user bypassing validation in case his password changed
+            bypass_sign_in(@user)
+            flash[:success] => "Your Password has been updated!"
+        else
+            flash[:alert] = @user.errors.full_messages.join("<br />")
+        end
     end
 
     private
@@ -45,7 +57,11 @@ class UsersController < ApplicationController
         @user = User.find(params[:id])
     end
 
+    def user_password_update_params
+        params.require(:user).permit(:current_password, :password, :password_confirmation)
+    end
+
     def user_params
-        params.require(:user)
+        params.require(:user).permit(:first_name, :last_name, :email)
     end
 end
