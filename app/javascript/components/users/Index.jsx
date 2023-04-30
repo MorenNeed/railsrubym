@@ -26,7 +26,6 @@ class Index extends React.Component {
       edited: false,
     };
 
-    this.gridApiRef = React.createRef();
     this.handleEditRowModelChange = this.handleEditRowModelChange.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleCancelClick = this.handleCancelClick.bind(this);
@@ -164,7 +163,6 @@ class Index extends React.Component {
             rows={this.state.rows}
             isRowSelectable={(params) => params.row.role != "ADMIN"}
             onCellEditStop={this.handleEditRowModelChange}
-            apiRef={this.gridApiRef}
           />
         </Box>
         <Box>

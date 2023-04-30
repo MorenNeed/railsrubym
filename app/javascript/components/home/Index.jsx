@@ -50,7 +50,7 @@ class Index extends React.Component {
             Shop Now
           </Link>
         </div>
-        <style jsx>{`
+        <style jsx="true">{`
           .slider-container {
             position: absolute;
             top: 0;

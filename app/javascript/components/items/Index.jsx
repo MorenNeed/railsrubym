@@ -3,7 +3,6 @@ import {
   Box,
   Grid,
   TextField,
-  Button,
   Typography,
   Card,
   CardActionArea,
@@ -45,7 +44,7 @@ class Index extends React.Component {
     );
 
     return (
-      <>
+      <div>
         <ResponsiveAppBar
           signed={this.props.signed}
           current_user={this.props.current_user}
@@ -166,7 +165,7 @@ class Index extends React.Component {
             </Typography>
           )}
         </Box>
-      </>
+      </div>
     );
   }
 }

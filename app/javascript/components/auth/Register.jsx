@@ -187,7 +187,7 @@ class Register extends React.Component {
           >
             Already have an account? <Link href="/auth/login">Login</Link>
           </Typography>
-          <style jsx>{`
+          <style jsx="true">{`
             .register-container {
               font-family: "Montserrat", sans-serif;
               margin: 8vh auto;

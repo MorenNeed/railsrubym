@@ -25,19 +25,17 @@ class Show extends React.Component {
     this.handleQuantityChange = this.handleQuantityChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-  static propTypes = {
-    item: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      price: PropTypes.string.isRequired,
-    }).isRequired,
-  };
 
   handleQuantityChange(event) {
     this.setState({ quantity: event.target.value });
   }
 
   handleClick() {
+    if(this.state.quantity <= 0 | isNaN(this.state.quantity)) {
+      alert("Wrong quantity!");
+      window.location.reload();
+      return;
+    }
     const items = JSON.parse(localStorage.getItem("cart")) || [];
     localStorage.setItem("cart", JSON.stringify([...items, {id: this.props.item.id, name: this.props.item.name, price: this.props.item.price, quantity: this.state.quantity}]));
   }
@@ -46,7 +44,7 @@ class Show extends React.Component {
     const { item } = this.props;
 
     return (
-      <>
+      <div>
         <ResponsiveAppBar
           signed={this.props.signed}
           current_user={this.props.current_user}
@@ -112,7 +110,7 @@ class Show extends React.Component {
             </Grid>
           </Grid>
         </Box>
-      </>
+      </div>
     );
   }
 }

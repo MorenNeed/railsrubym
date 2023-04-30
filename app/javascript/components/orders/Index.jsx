@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { Box, Breadcrumbs, Link, Typography } from "@mui/material";
 import ResponsiveAppBar from "../appBar/Index";
 
@@ -68,8 +67,6 @@ class Index extends React.Component {
         );
       }
     );
-
-    console.log("", tablesByUser);
 
     return (
       <React.Fragment>

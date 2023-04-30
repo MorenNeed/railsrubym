@@ -11,7 +11,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import axios from "axios";
 import { Divider, Link } from "@mui/material";
 import Cart from "../cart/Cart";
@@ -27,7 +26,7 @@ function ResponsiveAppBar(props) {
           { label: "Products", type: "link", data: "/items" },
           { label: "Manage Products", type: "link", data: "/items/manage"},
           { label: "Manage Users", type: "link", data: "/users" },
-          { label: "Manage Orders", type: "link", data: "/orders" },
+          { label: "View Orders", type: "link", data: "/orders" },
           { label: "Cart", type: "action", data: "toggleCartVisibility" },
         ]
       : [
@@ -67,6 +66,7 @@ function ResponsiveAppBar(props) {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
   const handleClick = (data) => {
     switch (data) {
       case "toggleCartVisibility":
@@ -114,7 +114,7 @@ function ResponsiveAppBar(props) {
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <img
-              src="logo.svg"
+              src="/favicon.ico"
               alt="Logo"
               sx={{ height: "40px", marginRight: "16px" }}
             />
@@ -267,7 +267,7 @@ function ResponsiveAppBar(props) {
             )}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ ml: 2, p: 0 }}>
-                <Avatar alt="User Avatar" src="avatar.jpg" />
+                <Avatar alt="User Avatar"/>
               </IconButton>
             </Tooltip>
             <Menu

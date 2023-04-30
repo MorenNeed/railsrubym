@@ -1,6 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
   Breadcrumbs,
@@ -34,7 +33,6 @@ class Edit extends React.Component {
       open: false,
     };
 
-    this.gridApiRef = React.createRef();
     this.handleEditRowModelChange = this.handleEditRowModelChange.bind(this);
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleCancelClick = this.handleCancelClick.bind(this);
@@ -137,14 +135,23 @@ class Edit extends React.Component {
     const csrfToken = document.querySelector('[name="csrf-token"]').content;
 
     this.state.updatedRows.map((row) => {
+      let updatedValue = row.newValue;
+      if (row.updatedField === "price") {
+        const priceValue = parseFloat(row.newValue);
+        if (isNaN(priceValue)) {
+          alert(`Invalid price value: ${row.newValue}`);
+          return;
+        }
+        updatedValue = priceValue;
+      }
       axios({
         method: "patch",
         url: `/items/${row.row.id}`,
         data: {
           item: {
-            [row.updatedField]: row.newValue,
+            [row.updatedField]: updatedValue,
           },
-          updatedValue: row.newValue,
+          updatedValue: updatedValue,
           updatedField: row.updatedField,
         },
         headers: {
@@ -161,15 +168,19 @@ class Edit extends React.Component {
 
   handleClickOpen() {
     this.setState({ open: true });
-  };
+  }
 
   handleClose() {
     this.setState({ open: false });
-  };
+  }
 
   handleAdd() {
     const csrfToken = document.querySelector('[name="csrf-token"]').content;
-    if (this.state.name.trim() === "" || this.state.description.trim() === "" || this.state.price.trim() === "") {
+    if (
+      this.state.name.trim() === "" ||
+      this.state.description.trim() === "" ||
+      this.state.price.trim() === ""
+    ) {
       alert("Please fill in all fields.");
       return;
     }
@@ -180,17 +191,16 @@ class Edit extends React.Component {
         item: {
           name: this.state.name,
           description: this.state.description,
-          price: this.state.price,
-        }
+          price: parseFloat(this.state.price).toFixed(2),
+        },
       },
       headers: {
-        'X-CSRF-Token': csrfToken
-      }
+        "X-CSRF-Token": csrfToken,
+      },
     }).then(() => {
       window.location.reload();
     });
   }
-
 
   handleNameChange(event) {
     this.setState({ name: event.target.value });
@@ -215,14 +225,18 @@ class Edit extends React.Component {
           <Link underline="hover" color="inherit" href="/">
             Home
           </Link>
-          <Typography color="text.primary">Users</Typography>
+          <Typography color="text.primary">Products</Typography>
         </Breadcrumbs>
         <Box>
           <Button
             variant="contained"
             color="primary"
             onClick={this.handleClickOpen}
-            style={{ marginTop: "20px", marginLeft: "40px", marginBottom: "20px" }}
+            style={{
+              marginTop: "20px",
+              marginLeft: "40px",
+              marginBottom: "20px",
+            }}
           >
             Add Item
           </Button>
@@ -279,7 +293,6 @@ class Edit extends React.Component {
             rows={this.state.rows}
             isRowSelectable={(params) => params.row.role != "ADMIN"}
             onCellEditStop={this.handleEditRowModelChange}
-            apiRef={this.gridApiRef}
           />
         </Box>
         <Box>

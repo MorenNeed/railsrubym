@@ -44,6 +44,7 @@ class OrdersController < ApplicationController
   end
 
   def destroy
+    @order = current_user.orders.includes(:order_descriptions).find(params[:id])
     @order.destroy
     respond_to do |format|
       format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }

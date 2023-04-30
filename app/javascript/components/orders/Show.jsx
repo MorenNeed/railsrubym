@@ -1,9 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { Box, Breadcrumbs, Link, Typography } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { Box, Breadcrumbs, Button, Link, Typography } from "@mui/material";
 import ResponsiveAppBar from "../appBar/Index";
+import axios from "axios";
 
 class Show extends React.Component {
   constructor(props) {
@@ -11,7 +10,23 @@ class Show extends React.Component {
     this.state = {
       rows: [],
     };
+    this.handleDelete = this.handleDelete.bind(this);
   }
+
+  handleDelete(order) {
+    const csrfToken = document.querySelector('[name="csrf-token"]').content;
+
+    axios({
+      method: "delete",
+      url: `/orders/${order.id}`,
+      headers: {
+        "X-CSRF-Token": csrfToken,
+      },
+    });
+
+    window.location.reload();
+  }
+
   render() {
     const tables = this.props.user_orders.map((order) => {
       const columns = [
@@ -38,7 +53,13 @@ class Show extends React.Component {
           <Typography variant="h5" style={{ padding: "1rem" }}>
             Order #{order.id}
           </Typography>
+          <Typography variant="h6" style={{ padding: ".5rem"}}>
+            Amount of items: {order.amount}
+          </Typography>
           <DataGrid columns={columns} rows={rows} />
+          <Button color="error" variant="outlined" style={{marginTop: "10px", marginLeft: "5px"}} onClick={() => this.handleDelete(order)}>
+            Delete Order #{order.id}
+          </Button>
         </Box>
       );
     });

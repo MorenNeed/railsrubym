@@ -137,7 +137,7 @@ class Cart extends React.Component {
             Buy
           </Button>
         </Box>
-        <style jsx>
+        <style jsx="true">
           {`
             .cart-container {
               z-index: 100;
