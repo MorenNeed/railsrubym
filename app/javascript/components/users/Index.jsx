@@ -1,7 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
   Breadcrumbs,
@@ -70,6 +68,7 @@ class Index extends React.Component {
             <IconButton
               onClick={() => this.handleDelete(params.row.id)}
               color={'default'}
+              disabled={params.row.role === "ADMIN"}
             >
               <Delete />
             </IconButton>
@@ -158,10 +157,8 @@ class Index extends React.Component {
         </Breadcrumbs>
         <Box sx={{ height: "70vh", width: "100%" }}>
           <DataGrid
-            checkboxSelection
             columns={this.state.columns}
             rows={this.state.rows}
-            isRowSelectable={(params) => params.row.role != "ADMIN"}
             onCellEditStop={this.handleEditRowModelChange}
           />
         </Box>
