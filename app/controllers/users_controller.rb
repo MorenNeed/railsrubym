@@ -45,7 +45,7 @@ class UsersController < ApplicationController
         if @user.update_with_password(user_password_update_params)
             # Sign in the user bypassing validation in case his password changed
             bypass_sign_in(@user)
-            flash[:success] => "Your Password has been updated!"
+            flash[:success] = "Your Password has been updated!"
         else
             flash[:alert] = @user.errors.full_messages.join("<br />")
         end
