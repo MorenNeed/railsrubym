@@ -36,7 +36,13 @@ class Show extends React.Component {
       window.location.reload();
       return;
     }
-    const items = JSON.parse(localStorage.getItem("cart") || []);
+    const cartItems = localStorage.getItem("cart");
+    if (cartItems) {
+      this.setState({ items: JSON.parse(cartItems) });
+    }
+    else {
+      this.setState({ items: [] });
+    }
     localStorage.setItem("cart", JSON.stringify([...items, {id: this.props.item.id, name: this.props.item.name, price: this.props.item.price, quantity: this.state.quantity}]));
   }
 

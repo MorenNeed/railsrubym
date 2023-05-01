@@ -60,7 +60,13 @@ class Cart extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ items: JSON.parse(localStorage.getItem("cart") || []) });
+    const cartItems = localStorage.getItem("cart");
+    if (cartItems) {
+      this.setState({ items: JSON.parse(cartItems) });
+    }
+    else {
+      this.setState({ items: [] });
+    }
   }
 
   render() {
