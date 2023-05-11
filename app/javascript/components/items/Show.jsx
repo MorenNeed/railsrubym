@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {
   Box,
   Breadcrumbs,
@@ -19,6 +18,7 @@ class Show extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      items: [],
       quantity: 0,
     };
 
@@ -31,13 +31,40 @@ class Show extends React.Component {
   }
 
   handleClick() {
-    if(this.state.quantity <= 0 | isNaN(this.state.quantity)) {
+    const { item } = this.props;
+    const { quantity } = this.state;
+
+    if (quantity <= 0 || isNaN(quantity)) {
       alert("Wrong quantity!");
-      window.location.reload();
       return;
     }
-    const items = JSON.parse(localStorage.getItem("cart")) || [];
-    localStorage.setItem("cart", JSON.stringify([...items, {id: this.props.item.id, name: this.props.item.name, price: this.props.item.price, quantity: this.state.quantity}]));
+
+    const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+    const index = cartItems.findIndex((cartItem) => cartItem.id === item.id);
+
+    if (index !== -1) {
+      const updatedCartItems = [...cartItems];
+      updatedCartItems[index] = {
+        ...updatedCartItems[index],
+        quantity:
+          parseInt(updatedCartItems[index].quantity, 10).toFixed(2) +
+          parseInt(quantity, 10).toFixed(2),
+      };
+
+      localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+    } else {
+      const newItem = {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity,
+      };
+      localStorage.setItem("cart", JSON.stringify([...cartItems, newItem]));
+    }
+
+    alert("Item added to cart!");
+    this.setState({ quantity: 1 });
+    window.location.reload();
   }
 
   render() {
@@ -105,7 +132,13 @@ class Show extends React.Component {
                   onChange={this.handleQuantityChange}
                   sx={{ marginBottom: 2, width: "10%", padding: "0 auto" }}
                 />
-                <Button variant="contained" size="large" onClick={this.handleClick}>Add to Cart</Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={this.handleClick}
+                >
+                  Add to Cart
+                </Button>
               </Box>
             </Grid>
           </Grid>

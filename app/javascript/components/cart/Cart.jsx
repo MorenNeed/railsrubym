@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import axios from "axios";
 import React from "react";
 
@@ -13,12 +13,13 @@ class Cart extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   removeFromCart(index) {
-    if (this.state.items.length == 1) {
-      const newItems = [];
-      localStorage.setItem("cart", JSON.stringify(newItems));
-      this.setState({ items: newItems });
+    const { items } = this.state;
+
+    if (items.length === 1) {
+      localStorage.removeItem("cart");
+      this.setState({ items: [] });
     } else {
-      const newItems = this.state.items.splice(index, 1);
+      const newItems = [...items.slice(0, index), ...items.slice(index + 1)];
       localStorage.setItem("cart", JSON.stringify(newItems));
       this.setState({ items: newItems });
     }
@@ -35,7 +36,8 @@ class Cart extends React.Component {
       );
 
       if (existingItem) {
-        const quantity = parseInt(existingItem.quantity, 10) + parseInt(item.quantity, 10);
+        const quantity =
+          parseInt(existingItem.quantity, 10) + parseInt(item.quantity, 10);
         existingItem.quantity = quantity;
       } else {
         order_descriptions_attributes.push({
@@ -48,11 +50,20 @@ class Cart extends React.Component {
 
     const csrfToken = document.querySelector('[name="csrf-token"]').content;
 
-    axios.post("/orders", {order: {amount: count, order_descriptions_attributes: order_descriptions_attributes}}, {
-      headers: {
-        'X-CSRF-Token': csrfToken
+    axios.post(
+      "/orders",
+      {
+        order: {
+          amount: count,
+          order_descriptions_attributes: order_descriptions_attributes,
+        },
+      },
+      {
+        headers: {
+          "X-CSRF-Token": csrfToken,
+        },
       }
-    });
+    );
 
     const newItems = [];
     localStorage.setItem("cart", JSON.stringify(newItems));
@@ -60,7 +71,12 @@ class Cart extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ items: JSON.parse(localStorage.getItem("cart") || []) });
+    const cartItems = localStorage.getItem("cart");
+    if (cartItems) {
+      this.setState({ items: JSON.parse(cartItems) });
+    } else {
+      this.setState({ items: [] });
+    }
   }
 
   render() {

@@ -288,10 +288,8 @@ class Edit extends React.Component {
         </Box>
         <Box sx={{ height: "fit-content", width: "100%" }}>
           <DataGrid
-            checkboxSelection
             columns={this.state.columns}
             rows={this.state.rows}
-            isRowSelectable={(params) => params.row.role != "ADMIN"}
             onCellEditStop={this.handleEditRowModelChange}
           />
         </Box>

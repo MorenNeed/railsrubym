@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 import { Divider, Link } from "@mui/material";
 import Cart from "../cart/Cart";
+import imagePath from "../../../assets/images/favicon.ico";
 
 function ResponsiveAppBar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -114,9 +115,9 @@ function ResponsiveAppBar(props) {
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <img
-              src="/favicon.ico"
+              src={imagePath}
               alt="Logo"
-              sx={{ height: "40px", marginRight: "16px" }}
+              style={{ height: "32px", marginRight: "16px", width: "32px" }}
             />
             <Typography
               variant="h6"
